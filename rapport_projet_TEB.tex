@@ -1,0 +1,402 @@
+%% LyX 2.0.8.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[a4paper,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{esint}
+\doublespacing
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\special{papersize=\the\paperwidth,\the\paperheight}
+
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{ESTIMATION DU TAUX D'ERREUR BINAIRE PAR LA METHODE DU NOYAU.}
+
+
+\author{\noindent OUATTARA Ardjouma, BAMOUNI Kevin, UO/LANIBIO/MASTER 1 MAIME}
+
+\maketitle
+
+\section{Introduction}
+
+La probabilité d\textquoteright{}erreur binaire PEB, qui littéralement
+désigne la probabilité qu\textquoteright{}un bit transmit soit erroné
+a la réception, est une valeur qui permet d\textquoteright{}évaluer
+les performances d\textquoteright{}un système de communication numérique,
+de connaitre le canal afin d\textquoteright{}y apporter d\textquoteright{}éventuelle
+amélioration pour assurer une qualité optimale de communication. Cependant
+pour des systèmes évolués et assez complexes il est difficile voir
+quasiment impossible de déterminer avec exactitude la PEB, pour cela
+l'on utilise une estimation, le TEB (taux d'erreur binaire). La méthode
+la plus connu et la plus basique de calcul du TEB est la méthode dite
+de Monte Carlo MC, qui consiste à simuler l\textquoteright{}émission
+d\textquoteright{}un nombre $N$ de bit connu, dans un canal bruité,
+dénombrer le nombre d\textquoteright{}erreur $e$ à la réception et
+à faire le rapport $e/n$, pour obtenir le TEB. Cette méthode au procédé
+simple a la principale conséquence d\textquoteright{}imposer un cout
+de calcul important, car pour obtenir une valeur plus proche de la
+PEB, il faut que $N$ tende vers $+\infty$. A titre d\textquoteright{}exemple,
+pour un canal qui impose une PEB de $10^{-6}$, pour obtenir un TEB
+à $10^{-1}$ près par la méthode de MC, il faudrait simuler $N=108$
+bit transmit avec un nombre $e$ d\textquoteright{}erreur de $10^{2}$.
+
+Dans le but d\textquoteright{}évaluer le TEB de manière plus rapide
+et au moins aussi efficace que MC, de nouvelles méthodes ont été proposées
+dont la méthode du noyau que nous étudierons. Elle est basée essentiellement
+sur l\textquoteright{}estimation, par une technique itérative et non-paramétrique,
+de la fonction densité de probabilité des valeurs observées au récepteur.
+
+
+\section{Approche du problème}
+
+Soit la chaine de communication suivante : 
+
+Soit $(b_{i})_{1\leq i\leq N}$ les bits modulés à transmettre, $X_{i}$
+correspondants aux $b_{i}$ atténués (après passage dans le canal),
+la réception souple et les $\hat{b}_{i}$ correspondants à la décision
+dure.
+
+Le principe de la décision dure est le suivant :
+
+$\begin{cases}
+\begin{array}{c}
+X_{i}\gneq0\Rightarrow\hat{b}_{i}=+1\\
+X_{i}\lneq0\Rightarrow\hat{b}_{i}=-1
+\end{array}\end{cases}$
+
+Soit $f_{X}(x)$ la fonction densité de probabilté des $(X_{i})_{1\leq i\leq N}$
+.
+
+Soit $\pi_{+}$et $\pi_{-}$ la probabilité que le bit transmit $b_{i}$,
+soit un $+1$, respectivement un $-1$ c'est à dire :
+
+$\begin{cases}
+\begin{array}{c}
+\pi_{+}=P\left[b_{i}=+1\right]\\
+\pi_{-}=P\left[b_{i}=-1\right]
+\end{array}\end{cases}$
+
+où $\pi_{+}+\pi_{-}=1$.
+
+$\pi_{+}$ et $\pi_{-}$ ne sont pas connu au récepteur.
+
+La probabilité d'erreur binaire (PEB) correspond essentiellement à
+décider un $+1$ à la décision dure alors que le bite transmit était
+un $-1$, et vice versa.
+
+Ainsi la PEB $P_{e}$ peut être modélisé par : 
+
+$P_{e}=P\left[\hat{b}_{i}\neq b_{i}\right]$
+
+$P_{e}=P\left[(X\lneq\text{0),(\ensuremath{b_{i}}=+1)}\right]+P\left[(X\lneq\text{0),(\ensuremath{b_{i}}=-1)}\right]$
+
+$P_{e}=P\left[X\lneq\text{0\ensuremath{\diagup b_{i}}=+1}\right]\times P\left[b_{i}=+1\right]+P\left[X\lneq\text{0\ensuremath{\diagup b_{i}}=-1}\right]\times P\left[b_{i}=-1\right]$
+
+$P_{e}=P\left[X\lneq\text{\ensuremath{0\diagup b_{i}=+1}}\right]\times\pi_{+}+P\left[X\gneq\text{0\ensuremath{\diagup b_{i}}=-1}\right]\times\pi_{-}$
+
+En utilisant les densités on peut écrire : 
+
+\begin{equation}
+P_{e}=\pi_{+}\int_{-\infty}^{0}f_{X}^{b_{+}}(x)\, dx+\pi_{-}\int_{0}^{+\infty}f_{X}^{b_{-}}(x)\, dx
+\end{equation}
+
+
+où $f_{X}^{b_{+}}(x)$ est la fonction de densité conditionnel de
+$X$ tel que $b_{i}=+1$ et $f_{X}^{b_{-}}(x)$ est la fonction de
+densité conditionnel de $X$ tel que $b_{i}=-1$.
+
+Au vu de cette expression de la PEB, on peut en déduire que pour trouver
+la PEB, on trouve les expressions des fonctions de densité de probabilités
+conditionnelles des $X_{i}$ avant de les intégrer et d'en faire la
+somme.
+
+Cependant nous ne dispososns pas de l'expression algébrique des fonctions
+de densités conditionnelles qui dépendent, du modèle du canal de communication
+et de la configuration du recepteur. Donc il est très difficile voir
+impossible de trouver la loi de distribution des $X_{i}$ donc de
+leur densité de probabilités conditionnelles.
+
+C'est dans le but d'apporter une solution à ce problème, qui est de
+trouver les expressions des densités, qu'intervient la méthode du
+noyau. Méthode qui va permettre d'estimer donc les densités conditionnelles
+$f_{X}^{b_{+}}(x)$ et $f_{X}^{b_{-}}(x)$. Cette technique est non
+paramétrique, du fait qu'aucune hypothèse n'est faite sur la loi vu
+la difficulté d'apprentissage des paramètres, et se base donc essentiellement
+sur la répartition (spatiales) des observations $X_{i}$.
+
+
+\section{Estimation non-paramétrique de la fonction de densité : Méthode du
+noyau.}
+
+Pososns $C=\left\{ X_{1},\ldots,X_{N}\right\} $, Supposons les classes,
+$C_{-}=\left\{ X_{i},1\leq i\leq N_{-}\diagup b_{i}=-1\right\} $
+et $C_{+}=\left\{ X_{i},1\leq i\leq N_{+}\diagup b_{i}=+1\right\} $
+tels que $C=C_{-}\cup C_{+}$ et $N=N_{-}+N_{+}.$
+
+En utlisant la méthode du noyau, on peut alors écrire une estimation
+de chaque fonction densité de probabilité en utilisant les classes
+$C_{-}$ et $C_{+}$, comme suit :
+
+\begin{equation}
+\hat{f}_{X,N+}^{b+}(x)=\frac{1}{N_{+}\times h_{N+}}\sum_{X_{i}\in C_{+}}K\left(\frac{x-X_{i}}{h{}_{N+}}\right)
+\end{equation}
+
+
+\begin{equation}
+\hat{f}_{X,N-}^{b-}=\frac{1}{N_{-}\times h_{N-}}\sum_{X_{i}\in C_{-}}K\left(\frac{x-X_{i}}{h{}_{N-}}\right)
+\end{equation}
+
+
+où les $h_{N_{+}}$ et $h_{N_{-}}$sont appellés paramètres de lissage
+dépendant de la taille des échantillons $N_{-}$et $N_{+}$.
+
+$K\left(.\right)$est une quelconque fonction de densité de probabilité
+paire et régulière de variance $1$ et de moyenne $nulle$. 
+
+Dans la suite, nous utiliserons le noyau gaussien : 
+
+\begin{equation}
+K(x)=\frac{1}{2\sqrt{\pi}}\exp(\frac{-x^{2}}{2})
+\end{equation}
+
+
+Dans la méthode du noyau, le choix des paramètres de lissage est très
+important du fait qu'ils influeent directement sur l'exactitude, la
+précision de l'estimation des fonctions de densité. Donc il convient
+de trouver le paramètre de lissage dit optimal.
+
+D'après (doc), il est montré que si $h_{N}$$\rightarrow$$0$ lorsque
+$N$ $\rightarrow$$\infty$, alors l'estimateur de la densité $\hat{f}_{X,N}(x)$
+est assymptotiquement non-biaisé. il est aussi montré que si $h_{N}$$\rightarrow$$0$
+et $Nh_{N}$ $\rightarrow$$\infty$lorsque $N$ $\rightarrow$$+\infty$
+alors l'Erreur Quadratique Moyenne (EQM) tend vers$0$.
+
+($h_{N+-}$désigne $h_{N_{+}}$ ou $h_{N_{-}}$, $N_{+-}$ désigne
+$N_{-}$ou $N_{+}$, $f_{X}^{b+-}$ désigne $f_{X}^{b+}$ ou $f_{X}^{b-}$)
+
+$\lim_{N\rightarrow+\infty}E\left[\left(\hat{f}_{X,N}(x)-f_{X}(x)\right)^{2}\right]=0$
+
+En outre le paramètre de lissage optimal s'obtient en minimisant l'Intégration
+de l'Erreur Quadratique Moyenne (IEQM).
+
+d'apres (doc) une approximation de IEQM est donné par la formule suivant:
+$IEQM=\frac{M(K)}{Nh_{N}}+\frac{J\left(f_{X)}\right)h_{N}^{4}}{4}$.
+
+Ainsi en minimisant IEQM pécédent, ont obtient que le paramètre de
+lissage optimal sera : 
+
+\begin{equation}
+h_{N}^{*}=N^{-\frac{1}{5}}\left(J\left(f_{X}^{b+-}\right)\right)^{-\frac{1}{5}}\left(M\left(K\right)\right)^{+\frac{1}{5}},
+\end{equation}
+
+
+où $M\left(K\right)=\int_{-\infty}^{+\infty}K^{2}(x)\, dx$ et $J\left(f_{X}^{b+-}\right)=\int_{-\infty}^{+\infty}\left\{ \left(f_{X}^{b+-}\right)^{\prime\prime}(x)\right\} ^{2}dx$
+
+Comme $h_{N}^{*}$ dépend de la densité conditionnelle inconnu $f_{X}^{b}$,
+alors il a été suggéré d'utilisé le noyau gaussien dont le paramètre
+$M\left(K\right)$ est donné par :
+
+$M(K)=\frac{1}{2\sqrt{\pi}}$,
+
+et dans le cas où nous supposons que $f_{X}^{b+-}$ suit une loi normale
+de paramètres $(m_{+-},\sigma_{+-}^{2})$ alors 
+
+$J\left(f_{X}^{b+-}\right)=\frac{3}{8\sqrt{\pi}\sigma_{+-}^{5}},$
+
+$(m_{+-},\sigma_{+-}^{2})$ peuvent être respectivement la moyenne
+et la variance de $C_{+}$ou $C_{-}$.
+
+Ainsi le paramètre de lissage optimal $h_{N+-}^{*}$, en utilisant
+un noyau gaussien et une densité de probabilité conditionnelle gaussienne,
+est : 
+
+\begin{equation}
+h_{N_{+-}}^{*}=\left(\frac{4}{3N_{+-}}\right)^{\frac{1}{5}}\sigma_{+-}
+\end{equation}
+
+
+
+\section{Estimation de la PEB : le TEB.}
+
+Comme nous avons pu le voir, l'expression du paramètre de lisssage
+orptimal dépend de $N_{+-}$, qui est le nombre de $X_{i}$ reçu sachant
+que le bit qui a été transmit est un $+1$ respectivement un $-1$.
+Supposant les $b_{i}$inconnus à la réception, il se pose un problème
+de detection. Car il faudrait connaître le nombre de $+1$ et de $-1$
+transmit sans pour autant connaître le message exact d'origine. Ainsi,
+le calcul du taux d'erreur binaire qui sera proposé devra effectuer
+la classification des $X_{i}$ dans les deux classes $C_{-}$ et $C_{+}$
+(évoqués au paragraphe précédent) puis l'estimation des fonctions
+de densité conditionnelles et des probabilités dites ``à priori''
+$\pi_{+}$ et $\pi_{-}$selon une méthode itérative qui utilisera
+les probabilités dites ``à postériori'' $P\left[b_{i}=+1\diagup X_{i}\right]$
+et $P\left[b_{i}=-1\diagup X_{i}\right]$$\forall i=1,...,N$. Soit
+$T$ le nombre d'itération $(t=1,...,T)$, qui est choisi de telle
+sorte que à $t=T$, $\left|h_{N+-}^{t}-h_{N+-}^{t-1}\right|\approx0$.
+A chaque itération t, on estime toutes les valeurs de $P\left[b_{i}=+1\diagup X_{i}\right]$
+et $P\left[b_{i}=-1\diagup X_{i}\right]$$\forall i=1,...,N$ en utilisant
+les valeurs de $\pi_{+}$ et $\pi_{-}$ et les fonctions de densités
+estimées à l'itération $t-1$. En d'autres termes on utilise les probabilité
+à priori pour calculer les probabilités à postériori et à chaque itération
+on calcul deux fonction de probabilités conditionnelles en fonction
+de celles de l'itération précédente. Notons q'à l'itération t=1, on
+ne dispose d'aucune information autre que les $X_{i}$ brutes reçu,
+on les utilise donc pour calculer les valeurs initiales de $\pi_{+}$
+et $\pi_{-}$. 
+
+Soit $\theta=(\pi_{+},N_{+},h_{N_{+}},\pi_{-},N_{-},h_{N_{-}})$.
+la valeur de $\theta$ est itérativement calculée, et à l'itération
+T , on obtien une valeur estimée qui sera utilisée pour calculer le
+TEB en utulisant la formule suivante : 
+
+\begin{equation}
+\hat{p}_{e.N}=\frac{\pi_{+}}{N_{+}}\sum_{i\in C_{+}}Q\left(\frac{X_{i}}{hN_{+}}\right)+\frac{\pi_{-}}{N_{-}}\sum_{i\in C_{-}}Q\left(-\frac{X_{i}}{hN_{-}}\right)
+\end{equation}
+
+
+Avec $Q(x)=\int_{x}^{+\infty}\frac{1}{\sqrt{2\pi}}\exp\left(-t^{2}/2\right)dt$.
+Cette formule est obtenue en introduisant les expressions des fonctions
+de densités conditionnelles $f_{X}^{b_{+}}(x)$ (2) et $f_{X}^{b_{-}}(x)$
+(3) et celles de $\theta$ dans la formule analytique de la PEB (équation
+(1)).
+
+Pour résumer, afin de pouvoir calculer le TEB $\hat{p}_{e.N}$, nous
+devons tout d'abord estimer à l'aide d'une méthode itérative $\theta=(\pi_{+},N_{+},h_{N_{+}},\pi_{-},N_{-},h_{N_{-}})$. 
+
+Tout d'abord il faudra trouver les classes $C_{-}=\left\{ X_{i},1\leq i\leq N_{-}\diagup b_{i}=-1\right\} $
+et $C_{+}=\left\{ X_{i},1\leq i\leq N_{+}\diagup b_{i}=+1\right\} $
+(méthode de classification) puis en déduire les paramètres $N_{-}$
+et $N_{+}$. 
+
+Ensuite il faudra estimer, itérativement, les probabilités ``à priori''
+$\pi_{+}$et $\pi_{-}$. Il faut noter que dans un premier temps on
+utilise les probabilités $\pi_{+}$et $\pi_{-}$ pour estimer $P\left[b_{i}=+1\diagup X_{i}\right]$
+et $P\left[b_{i}=-1\diagup X_{i}\right]$, puis dans un second temps
+on utilise $P\left[b_{i}=+1\diagup X_{i}\right]$ et $P\left[b_{i}=-1\diagup X_{i}\right]$
+pour estimer $\pi_{+}$et $\pi_{-}$ (ceux qui nous interressent dans
+l'estimation de $\theta$). 
+
+En utilisant les paramètres pécédemment calculés on estime le paramètre
+de lissage optimal $h$ en utilisant sa formule (équation (6)). 
+
+Après avoir obtenu l'estimation de $\theta$ on calcul la valeur estimée
+du TEB en utilisant sa formule. (équation(7)).
+
+
+\section{Classification des $X_{1},...,X_{N}$ et estimation de $\theta$
+en utilisant un algorithme espérance-maximisation (EM) Stochastique.}
+
+Une définition tirée de wikipédia nous dit que: \textit{L'algorithme
+espérance-maximisation (en anglais Expectation-maximisation algorithm,
+souvent abrégé EM), proposé par Dempster et al. (1977), est une classe
+d'algorithmes qui permettent de trouver le maximum de vraisemblance
+des paramètres de modèles probabilistes lorsque le modèle dépend de
+variables latentes non observables.}
+
+{\scriptsize{}(Référence: A.P. Dempster, N.M. Laird et Donald Rubin,
+« Maximum Likelihood from Incomplete Data via the EM Algorithm »,
+Journal of the Royal Statistical Society. Series B (Methodological),
+vol. 39, no 1,1977, p. 1\textendash{}38 (JSTOR 2984875))}{\scriptsize \par}
+
+$\,$
+
+L'algorithme EM effectue de manière itérative des estimations et des
+maximisations afin d'obtenir une estimation du maximum de vraissemblance
+lorsque les données sont jugées incomplètes ou érronées. le EM stochastique
+introduit une notion d'aléatoire dans l'algorithme Em. 
+
+Nous voulons classer les receptions souples $X_{1},...,X_{N}$ en
+deux classes tout en supposant que les bits de l'information $b_{i}$
+transmis initialements sont totalement inconnus. Nous utiliserons
+donc l'algorithme EM stochastique, qui d'après sa définition permettrait
+d'estimer $\theta$.
+
+l'algorithme se déroule essentiellement en 3 étapes :
+
+
+\subsubsection*{A. L'estimation}
+
+On estime les probabilités, à chaque itération, ''à postériori''
+$P\left[b_{i}=+1\diagup X_{i}\right]$ et $P\left[b_{i}=-1\diagup X_{i}\right]$
+en utilisant les probabilités ''à priori''$\pi_{+}$et $\pi_{-}$
+en utilisant la formule suivante : 
+
+\begin{equation}
+\begin{cases}
+\begin{array}{cc}
+\rho_{i_{+}}^{(t)}\,=P\left[b_{i}=+1\diagup X_{i}\right] & =\frac{\pi_{+}^{(t-1)}\times\hat{f}_{X,N_{+}^{(t-1)}}^{b_{+}}(x_{i})}{\pi_{+}^{(t-1)}\times\hat{f}_{X,N_{+}^{(t-1)}}^{b_{+}}(x_{i})+\pi_{-}^{(t-1)}\times\hat{f}_{X,N_{-}^{(t-1)}}^{b_{-}}(x_{i})}\\
+\rho_{i_{-}}^{(t)}=P\left[b_{i}=-1\diagup X_{i}\right] & =\frac{\pi_{-}^{(t-1)}\times\hat{f}_{X,N_{-}^{(t-1)}}^{b_{-}}(x_{i})}{\pi_{+}^{(t-1)}\times\hat{f}_{X,N_{+}^{(t-1)}}^{b_{+}}(x_{i})+\pi_{-}^{(t-1)}\times\hat{f}_{X,N_{-}^{(t-1)}}^{b_{-}}(x_{i})}
+\end{array}\end{cases}
+\end{equation}
+
+
+On initialise $\pi_{+}$et $\pi_{-}$en utilisant les $X_{i}$: 
+
+\begin{equation}
+\begin{cases}
+\begin{array}{cc}
+\pi_{+}^{0} & =\frac{|X_{i}\gneq0|}{N}\\
+\pi_{-}^{0} & =\frac{|X_{i}\lneq0|}{N}
+\end{array}\end{cases}
+\end{equation}
+
+
+
+\subsubsection*{B. La maximisation}
+
+A cette étape commence l'estimation de $\theta$.
+
+A chaque itération $t$, On obtient une estimation de $\theta$ en
+maximisant l'espérance conditionnelle $Q(\theta^{(t)})$ du logarithme
+de la vraissemblance. De la maximisation de $Q(\theta^{(t)})$ on
+en déduit l'estimation des probabilités ''à priori'' :
+
+\begin{equation}
+\begin{cases}
+\begin{array}{cc}
+\pi_{+}^{t} & =\frac{1}{N}\sum_{i=1}^{N}\rho_{i_{+}}^{(t)}\\
+\pi_{+}^{t} & =\frac{1}{N}\sum_{i=1}^{N}\rho_{i_{-}}^{(t)}
+\end{array}\end{cases}
+\end{equation}
+
+
+
+\subsubsection*{C. La classification}
+
+L'estimation des paramètres $N_{+},h_{N_{+}},N_{-},h_{N_{-}}$et des
+fonctions de densité conditionnelles passent par la classification
+des $X_{i}$ en $C_{-},et\: C_{+}$.
+
+La technique de EM stochastique, combine la vraisemblance et les probabilités
+$U_{1}^{(t)},...,U_{N}^{(t)}$ d'une variable aléatoire $U$ de loi
+uniforme sur $\left[0,1\right]$ pour effectuer la classification
+selon le procédé suivant:
+
+\begin{equation}
+\begin{cases}
+\begin{array}{cc}
+C_{+}^{(t)} & =\left\{ X_{i}:\rho_{i_{+}}^{(t)}\geq U_{i}^{(t)}\right\} \\
+C_{-}^{(t)} & =\bar{C_{+}^{t}}
+\end{array}\end{cases}
+\end{equation}
+
+
+De la classification on en déduit les autres paramètres:
+\begin{itemize}
+\item $N_{+}^{(t)}=|C_{+}^{(t)}|$et $N_{-}^{(t)}=|C_{-}^{(t)}|$
+\item Les paramètres de lissage optimaux $h_{N_{+-}}^{(t)}$sont estimés
+à l'aide de la formule (6).
+\item Les fonctions de densités conditionelles sont estimées à l'aide des
+formules (2) et (3).\end{itemize}
+
+\end{document}
