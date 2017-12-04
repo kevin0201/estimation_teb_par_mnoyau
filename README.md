@@ -1,5 +1,5 @@
 # TEB_MethodeDuNoyau
 
-Projet de Modélisation en Télécommunications :
+Projet de master 1 MAIME réalisé avec un binome.
 
-Estimation du taux d'erreur binaire par la méthode du noyau.
+Modélisation en Télécommunications : Estimation du taux d'erreur binaire par la méthode du noyau.
